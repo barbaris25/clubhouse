@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 /clubhouse-source
+/.vscode
+/.idea
+/server/.env
 /.pnp
 .pnp.js
 
