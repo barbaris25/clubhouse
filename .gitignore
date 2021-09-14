@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/clubhouse-source
 /.pnp
 .pnp.js
 

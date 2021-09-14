@@ -1,0 +1,9 @@
+start postgres
+docker ps -a
+psql -h localhost -p 5432 -U postgres -W
+
+start adminer
+docker run --link postgresql-container:db -p 8080:8080 adminer
+
+start pg_admin
+docker run --rm -p 5050:5050 thajeztah/pgadmin4
