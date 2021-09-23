@@ -1,22 +1,22 @@
-import React from "react";
-import clsx from "clsx";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { WhiteBlock } from "../../WhiteBlock";
-import { Button } from "../../Button";
-import { StepInfo } from "../../StepInfo";
-import Axios from "../../../core/axios";
+import React from 'react';
+import clsx from 'clsx';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { WhiteBlock } from '../../WhiteBlock';
+import { Button } from '../../Button';
+import { StepInfo } from '../../StepInfo';
+import { Axios } from '../../../core/axios';
 
-import styles from "./EnterPhoneStep.module.scss";
+import styles from './EnterPhoneStep.module.scss';
 
 export const EnterCodeStep = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [codes, setCodes] = React.useState<string[]>(["", "", "", ""]);
+  const [codes, setCodes] = React.useState<string[]>(['', '', '', '']);
   const nextDisabled = codes.some((v) => !v);
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const index = Number(event.target.getAttribute("id"));
+    const index = Number(event.target.getAttribute('id'));
     const value = event.target.value;
 
     setCodes((prev) => {
@@ -33,10 +33,10 @@ export const EnterCodeStep = () => {
   const onSubmit = async () => {
     try {
       setIsLoading(true);
-      await Axios.get("/todos");
-      router.push("/rooms");
+      await Axios.get('/todos');
+      router.push('/rooms');
     } catch (error) {
-      alert("Ошибка при активации!");
+      alert('Ошибка при активации!');
     }
 
     setIsLoading(false);
@@ -51,8 +51,8 @@ export const EnterCodeStep = () => {
             title="Enter your activate code"
           />
 
-          <WhiteBlock className={clsx("m-auto mt-30", styles.whiteBlock)}>
-            <div className={clsx("mb-30", styles.codeInput)}>
+          <WhiteBlock className={clsx('m-auto mt-30', styles.whiteBlock)}>
+            <div className={clsx('mb-30', styles.codeInput)}>
               {codes.map((code, index) => (
                 <input
                   key={index}

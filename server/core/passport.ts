@@ -1,6 +1,26 @@
 import passport from 'passport';
-import { Strategy as GithubStrategy } from 'passport-github';
+import { Strategy as GithubStrategy, StrategyOption } from 'passport-github';
+import {
+  Strategy as JwtStrategy,
+  ExtractJwt,
+  StrategyOptions,
+} from 'passport-jwt';
+import { createJwtToken } from '../utils/createJWTtoken';
 import { users } from '../../models';
+import { UserData } from '../../pages';
+
+const opts: StrategyOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
+};
+
+passport.use(
+  'jwt',
+  new JwtStrategy(opts, (jwt_payload, done) => {
+    console.log(jwt_payload);
+    done(null, jwt_payload);
+  })
+);
 
 passport.use(
   'github',
@@ -12,26 +32,33 @@ passport.use(
     },
     async (_: unknown, __: unknown, profile, done) => {
       try {
-        const userData = {
+        let userData: UserData;
+
+        const obj: Omit<UserData, 'id'> = {
           fullName: profile.displayName,
           avatarUrl: profile.photos?.[0].value,
-          isActive: 0,
+          isActive: false,
           userName: profile.username,
           phone: '',
         };
 
         const findUser = await users.findOne({
           where: {
-            userName: userData.userName,
+            userName: obj.userName,
           },
         });
 
         if (!findUser) {
-          const user = await users.create(userData);
-          return done(null, user.toJSON());
+          const user = await users.create(obj);
+          userData = user.toJSON();
+        } else {
+          userData = await findUser.toJSON();
         }
 
-        return done(null, findUser);
+        done(null, {
+          ...userData,
+          token: createJwtToken(userData),
+        });
       } catch (error) {
         done(error);
       }

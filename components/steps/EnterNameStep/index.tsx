@@ -1,15 +1,17 @@
-import clsx from "clsx";
-import { WhiteBlock } from "../../WhiteBlock";
-import { Button } from "../../Button";
-import { StepInfo } from "../../StepInfo";
+import clsx from 'clsx';
+import { WhiteBlock } from '../../WhiteBlock';
+import { Button } from '../../Button';
+import { StepInfo } from '../../StepInfo';
 
-import styles from "./EnterNameStep.module.scss";
-import React from "react";
-import { MainContext } from "../../../pages";
+import styles from './EnterNameStep.module.scss';
+import React from 'react';
+import { MainContext } from '../../../pages';
 
 export const EnterNameStep = () => {
-  const [inputValue, setInputValue] = React.useState<string>("");
-  const { onNextStep } = React.useContext(MainContext);
+  const { onNextStep, userData, setFieldValue } = React.useContext(MainContext);
+  const [inputValue, setInputValue] = React.useState<string>(
+    userData.fullName || ''
+  );
 
   const nextDisabled = !inputValue;
 
@@ -18,6 +20,7 @@ export const EnterNameStep = () => {
   };
 
   const onClickNextStep = () => {
+    setFieldValue('fullName', inputValue);
     onNextStep();
   };
 
@@ -29,7 +32,7 @@ export const EnterNameStep = () => {
         description="People use real names on Clubhouse :) Thnx!"
       />
 
-      <WhiteBlock className={clsx("m-auto", styles.whiteBlock)}>
+      <WhiteBlock className={clsx('m-auto', styles.whiteBlock)}>
         <div className="mb-30">
           <input
             onChange={handleChangeInput}

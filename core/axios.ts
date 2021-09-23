@@ -1,16 +1,15 @@
-import Axios from "axios";
+import axios from 'axios';
 
-const instance = Axios.create({
-  baseURL: "http://localhost:3000/",
-  withCredentials: true,
+const Axios = axios.create({
+  baseURL: 'http://localhost:3001/',
 });
 
-instance.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    config.headers.Authorization = window.localStorage.getItem("token");
+Axios.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    config.headers.Authorization = window.localStorage.getItem('token');
   }
 
   return config;
 });
 
-export default instance;
+export { Axios };
